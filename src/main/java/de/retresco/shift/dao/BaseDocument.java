@@ -3,8 +3,7 @@
  */
 package de.retresco.shift.dao;
 
-import com.apple.crypto.provider.MessageDigestSHA1;
-import de.retresco.shift.exceptions.ShiftClientException;
+import de.retresco.shift.exceptions.ShiftDataViolation;
 import de.retresco.shift.serialize.DateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,12 +13,15 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Base document for SHIFT related data.
@@ -36,10 +38,21 @@ public class BaseDocument {
     }
 
     /**
+     * Bean validator.
+     */
+    private final static Validator VALIDATOR;
+
+    static {
+        final ValidatorFactory f = Validation.buildDefaultValidatorFactory();
+        VALIDATOR = f.getValidator();
+    }
+
+    /**
      * The object's URL.
      */
     @Getter
     @Setter
+    @NotNull
     private String url;
 
     /**
@@ -49,7 +62,9 @@ public class BaseDocument {
      */
     @Getter
     @Setter
-    private List<String> sources;
+    @NotNull
+    @Size(min = 1)
+    private List<String> source;
 
     /**
      * Some copyright information.
@@ -70,15 +85,24 @@ public class BaseDocument {
      */
     @Getter
     @Setter
+    @NotNull
     @JsonSerialize(using = DateTimeSerializer.class)
-    private DateTime startdate = null;
+    private DateTime timestamp;
+
+    /**
+     * Indicate when the item should be published, i.e. be available for widgets.
+     */
+    @Getter
+    @Setter
+    @JsonSerialize(using = DateTimeSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
+    private DateTime startdate;
 
     /**
      * Indicate when the item should be unpublished, i.e. not be available anymore.
      */
     @Getter
     @Setter
-    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonSerialize(using = DateTimeSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
     private DateTime enddate;
 
     /**
@@ -115,14 +139,7 @@ public class BaseDocument {
      */
     @Getter
     @Setter
-    private boolean paidcontent;
-
-    /**
-     * List of categories (Ressorts) for this article.
-     */
-    @Getter
-    @Setter
-    private List<String> ressort;
+    private Boolean paidcontent = null;
 
     /**
      * Subressort information.
@@ -142,13 +159,18 @@ public class BaseDocument {
      * Convert an instance of one of the DAOs to their JSON representation.
      *
      * @return The json string of this instance.
-     *
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException
      */
-    public String toJson() throws JsonGenerationException, JsonMappingException, IOException {
-        return BaseDocument.MAPPER.writeValueAsString(this);
+    public String toJson() throws JsonGenerationException, JsonMappingException, IOException, ShiftDataViolation {
+        final Set<ConstraintViolation<BaseDocument>> violations = VALIDATOR.validate(this);
+        if (violations.size() > 0) {
+            for (final ConstraintViolation<BaseDocument> violation : violations) {
+                throw new ShiftDataViolation(violation);
+            }
+        }
+        return MAPPER.writeValueAsString(this);
     }
 
 }

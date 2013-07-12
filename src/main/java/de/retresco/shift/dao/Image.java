@@ -5,7 +5,9 @@ package de.retresco.shift.dao;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.codehaus.jackson.annotate.JsonProperty;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * A SHIFT image.
@@ -17,6 +19,14 @@ public class Image extends BaseDocument {
      */
     @Getter
     @Setter
+    @NotNull
     private String caption;
+
+    /**
+     * List of categories (Ressorts) for this article.
+     */
+    @Getter
+    @Setter
+    private List<String> ressort;
 
 }

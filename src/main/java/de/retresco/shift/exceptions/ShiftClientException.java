@@ -4,11 +4,12 @@
 package de.retresco.shift.exceptions;
 
 /**
- * Base exception when talking to SHIFT.
+ * Wrapper exception thrown, when there was a problem communicating with the SHIFT import API.
  */
-public class ShiftClientException extends Exception {
+public class ShiftClientException extends ShiftException {
 
     public ShiftClientException(final Exception cause) {
         this.initCause(cause);
     }
+
 }
