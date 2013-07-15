@@ -31,9 +31,9 @@ import java.util.Arrays;
 /**
  * Simple tests demonstrating the usage.
  */
+@Ignore
 public class ShiftClientTest extends TestCase {
 
-    @Ignore
     @Test
     public void testSimpleArticle() throws ShiftClientException, ShiftDataViolation {
         final ShiftClient client = new ShiftClient(false, "localhost:14180", "meo3SgyuwhFwSFQZn+6KuZbg",
@@ -51,7 +51,6 @@ public class ShiftClientTest extends TestCase {
 
     }
 
-    @Ignore
     @Test
     public void testSimpleImage() throws ShiftClientException, ShiftDataViolation {
         final ShiftClient client = new ShiftClient(false, "localhost:14180", "meo3SgyuwhFwSFQZn+6KuZbg",
@@ -66,7 +65,6 @@ public class ShiftClientTest extends TestCase {
         assertTrue(client.addImage(image));
     }
 
-    @Ignore
     @Test
     public void testImageRemoval() throws ShiftClientException {
         final ShiftClient client = new ShiftClient(false, "localhost:14180", "meo3SgyuwhFwSFQZn+6KuZbg",
