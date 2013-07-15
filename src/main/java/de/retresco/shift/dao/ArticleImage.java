@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Embedded images in articles.
  */
-public class ArticleImage {
+public class ArticleImage extends ShiftDao {
 
     /**
      * The object's URL.
@@ -31,6 +31,7 @@ public class ArticleImage {
      */
     @Getter
     @Setter
+    @NotNull
     @Size(min = 1)
     private List<String> source;
 
@@ -56,7 +57,7 @@ public class ArticleImage {
     @Getter
     @Setter
     @JsonProperty("as_separate_image")
-    private boolean asSeperateImage = true;
+    private boolean asSeparateImage = true;
 
     /**
      * Author of the document if any.

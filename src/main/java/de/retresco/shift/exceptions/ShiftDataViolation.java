@@ -1,6 +1,7 @@
 package de.retresco.shift.exceptions;
 
 import de.retresco.shift.dao.BaseDocument;
+import de.retresco.shift.dao.ShiftDao;
 import lombok.Getter;
 
 import javax.validation.ConstraintViolation;
@@ -15,9 +16,9 @@ public class ShiftDataViolation extends ShiftException {
      * Access the underlying bean validation error.
      */
     @Getter
-    private final ConstraintViolation<BaseDocument> violation;
+    private final ConstraintViolation<? extends ShiftDao> violation;
 
-    public ShiftDataViolation(final ConstraintViolation<BaseDocument> violation) {
+    public ShiftDataViolation(final ConstraintViolation<? extends ShiftDao> violation) {
         this.violation = violation;
     }
 

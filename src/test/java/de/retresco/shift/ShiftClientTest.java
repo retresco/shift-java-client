@@ -13,11 +13,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 /**
- * Created with IntelliJ IDEA.
- * User: daniel
- * Date: 7/12/13
- * Time: 5:19 PM
- * To change this template use File | Settings | File Templates.
+ * Simple tests demonstrating the usage.
  */
 public class ShiftClientTest extends TestCase {
 

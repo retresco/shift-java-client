@@ -56,13 +56,17 @@ public class ArticleTest extends TestCase {
         final Article testArticle = dummyArticle();
         final ArticleImage image = new ArticleImage();
         image.setCaption("Ein Bild zum Artikel");
+        image.setUrl("http://www.google.de/image.jpg");
+        image.setSource(Arrays.asList("me"));
         testArticle.setImage(image);
 
         assertEquals("{\"url\":\"http://www.google.de/article.html\",\"source\":[\"me\"]," +
                 "\"timestamp\":\"2012-12-13T14:15:00.000\"," +
                 "\"title\":\"Ein Titel\",\"teaser\":\"Ein Teaser\"," +
                 "\"html\":\"<p>Ein richtig langer Artikel in dem es um Alles und Nichts geht!</p>\"," +
-                "\"image\":{\"caption\":\"Ein Bild zum Artikel\",\"as_separate_image\":true}," +
+                "\"image\":{\"url\":\"http://www.google.de/image.jpg\",\"source\":[\"me\"]," +
+                "\"caption\":\"Ein Bild zum Artikel\"," +
+                "\"as_separate_image\":true}," +
                 "\"ressort\":[\"Politik\"]}",
                 testArticle.toJson());
     }
@@ -72,6 +76,8 @@ public class ArticleTest extends TestCase {
         final Article testArticle = dummyArticle();
         final ArticleImage image = new ArticleImage();
         image.setCaption("Ein Bild zum Artikel");
+        image.setUrl("http://www.google.de/image.jpg");
+        image.setSource(Arrays.asList("me"));
         testArticle.setImage(image);
         testArticle.setStartdate(new DateTime(2012, 12, 12, 13, 15));
         testArticle.setEnddate(new DateTime(2013, 12, 12, 13, 15));
@@ -81,7 +87,9 @@ public class ArticleTest extends TestCase {
                 "\"startdate\":\"2012-12-12T13:15:00.000\",\"enddate\":\"2013-12-12T13:15:00.000\"," +
                 "\"title\":\"Ein Titel\",\"teaser\":\"Ein Teaser\"," +
                 "\"html\":\"<p>Ein richtig langer Artikel in dem es um Alles und Nichts geht!</p>\"," +
-                "\"image\":{\"caption\":\"Ein Bild zum Artikel\",\"as_separate_image\":true}," +
+                "\"image\":{\"url\":\"http://www.google.de/image.jpg\",\"source\":[\"me\"]," +
+                "\"caption\":\"Ein Bild zum Artikel\"," +
+                "\"as_separate_image\":true}," +
                 "\"ressort\":[\"Politik\"]}",
                 testArticle.toJson());
     }
@@ -92,8 +100,10 @@ public class ArticleTest extends TestCase {
         final ArticleImage image = new ArticleImage();
         image.setCaption("Ein Bild zum Artikel");
         image.setCopyright("Achim Menzel");
-        image.setAsSeperateImage(false);
+        image.setAsSeparateImage(false);
         image.setAuthor("Achim Menzel");
+        image.setUrl("http://www.google.de/image.jpg");
+        image.setSource(Arrays.asList("me"));
         testArticle.setImage(image);
         testArticle.setStartdate(new DateTime(2012, 12, 12, 13, 15));
         testArticle.setEnddate(new DateTime(2013, 12, 12, 13, 15));
@@ -103,7 +113,8 @@ public class ArticleTest extends TestCase {
                 "\"startdate\":\"2012-12-12T13:15:00.000\",\"enddate\":\"2013-12-12T13:15:00.000\"," +
                 "\"title\":\"Ein Titel\",\"teaser\":\"Ein Teaser\"," +
                 "\"html\":\"<p>Ein richtig langer Artikel in dem es um Alles und Nichts geht!</p>\"," +
-                "\"image\":{\"copyright\":\"Achim Menzel\"," +
+                "\"image\":{\"url\":\"http://www.google.de/image.jpg\",\"source\":[\"me\"]," +
+                "\"copyright\":\"Achim Menzel\"," +
                 "\"caption\":\"Ein Bild zum Artikel\",\"author\":\"Achim Menzel\",\"as_separate_image\":false}," +
                 "\"ressort\":[\"Politik\"]}",
                 testArticle.toJson());

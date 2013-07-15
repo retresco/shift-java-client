@@ -32,12 +32,12 @@ import java.util.Set;
 /**
  * Base document for SHIFT related data.
  */
-public class BaseDocument {
+public class BaseDocument extends ShiftDao {
 
     /**
      * The jackson object mapper.
      */
-    private final static ObjectMapper MAPPER = new ObjectMapper();
+    protected final static ObjectMapper MAPPER = new ObjectMapper();
 
     static {
         MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
@@ -46,7 +46,7 @@ public class BaseDocument {
     /**
      * Bean validator.
      */
-    private final static Validator VALIDATOR;
+    protected final static Validator VALIDATOR;
 
     static {
         final ValidatorFactory f = Validation.buildDefaultValidatorFactory();
@@ -160,24 +160,6 @@ public class BaseDocument {
     @Getter
     @Setter
     private String author;
-
-    /**
-     * Convert an instance of one of the DAOs to their JSON representation.
-     *
-     * @return The json string of this instance.
-     * @throws JsonGenerationException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public String toJson() throws JsonGenerationException, JsonMappingException, IOException, ShiftDataViolation {
-        final Set<ConstraintViolation<BaseDocument>> violations = VALIDATOR.validate(this);
-        if (violations.size() > 0) {
-            for (final ConstraintViolation<BaseDocument> violation : violations) {
-                throw new ShiftDataViolation(violation);
-            }
-        }
-        return MAPPER.writeValueAsString(this);
-    }
 
     /**
      * Compute the SHIFT item id.
