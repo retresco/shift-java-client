@@ -6,6 +6,7 @@ package de.retresco.shift;
 import de.retresco.shift.dao.Article;
 import de.retresco.shift.dao.Image;
 import de.retresco.shift.exceptions.ShiftClientException;
+import de.retresco.shift.exceptions.ShiftDataViolation;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -72,19 +73,18 @@ public class ShiftClient {
     /**
      * Constructor setting all necessary values needed to talk to the SHIFT Import API.
      *
-     * @param apiUrl
+     * @param apiHost
      * @param apiKey
      * @param apiSecret
      */
-    ShiftClient(final boolean secure, final String apiUrl, final String apiKey, final String apiSecret,
+    ShiftClient(final boolean secure, final String apiHost, final String apiKey, final String apiSecret,
                 final HttpClient httpClient) {
         final String scheme = secure ? "https://" : "http://";
-        this.articleUrl = scheme + apiUrl + "article/";
-        this.imageUrl = scheme + apiUrl + "image/";
+        this.articleUrl = scheme + apiHost + "/contentpool/article/";
+        this.imageUrl = scheme + apiHost + "/contentpool/image/";
 
         this.oAuthConsumer = new CommonsHttpOAuthConsumer(apiKey, apiSecret);
         this.oAuthConsumer.setTokenWithSecret(null, "");
-        this.oAuthConsumer.setSendEmptyTokens(true);
         this.httpClient = httpClient;
     }
 
@@ -98,20 +98,16 @@ public class ShiftClient {
         try {
             this.oAuthConsumer.sign(request);
         } catch (OAuthMessageSignerException e) {
-            // TODO throw specialized exception
             throw new ShiftClientException(e);
         } catch (OAuthExpectationFailedException e) {
-            // TODO throw specialized exception
             throw new ShiftClientException(e);
         } catch (OAuthCommunicationException e) {
-            // TODO throw specialized exception
             throw new ShiftClientException(e);
         }
 
         try {
             return this.httpClient.execute(request);
         } catch (IOException e) {
-            // TODO throw specialized exception
             throw new ShiftClientException(e);
         }
     }
@@ -122,31 +118,42 @@ public class ShiftClient {
      * @param article The article to add.
      * @throws ShiftClientException Thrown, if there was any error talking to SHIFT. The original cause is
      *                              initialized correctly.
+     * @throws ShiftDataViolation Upon serialization errors for the article
      */
-    public void addArticle(final Article article) throws ShiftClientException {
+    public boolean addArticle(final Article article) throws ShiftClientException, ShiftDataViolation {
         final HttpPost post = new HttpPost(this.articleUrl);
 
         try {
             final HttpEntity body = new StringEntity(article.toJson(), ContentType.APPLICATION_JSON);
             post.setEntity(body);
         } catch (final IOException e) {
-            // TODO throw specialized exception
             throw new ShiftClientException(e);
         }
 
         final HttpResponse response = executeRequest(post);
-
+        return response.getStatusLine().getStatusCode() == 200;
     }
 
     /**
      * Remove an existing article from SHIFT.
      *
-     * @param article The article to remove.
+     * @param article The article to remove
      * @return {@code true} if successful, {@code false} otherwise.
      * @throws ShiftClientException
      */
     public boolean removeArticle(final Article article) throws ShiftClientException {
-        final HttpDelete delete = new HttpDelete(this.articleUrl + article.getUrl());
+        return this.removeImageById(article.getItemId());
+    }
+
+    /**
+     * Remove an existing article from SHIFT.
+     *
+     * @param articleId The article ID to remove
+     * @return {@code true} if successful, {@code false} otherwise.
+     * @throws ShiftClientException
+     */
+    public boolean removeArticleById(final String articleId) throws ShiftClientException {
+        final HttpDelete delete = new HttpDelete(this.articleUrl + articleId);
         final HttpResponse response = executeRequest(delete);
 
         return response.getStatusLine().getStatusCode() == 204;
@@ -157,7 +164,7 @@ public class ShiftClient {
      *
      * @param image The image to add.
      */
-    public void addImage(final Image image) throws ShiftClientException {
+    public boolean addImage(final Image image) throws ShiftClientException, ShiftDataViolation {
         final HttpPost post = new HttpPost(this.imageUrl);
 
         try {
@@ -169,6 +176,7 @@ public class ShiftClient {
         }
 
         final HttpResponse response = executeRequest(post);
+        return response.getStatusLine().getStatusCode() == 200;
     }
 
     /**
@@ -179,9 +187,21 @@ public class ShiftClient {
      * @throws ShiftClientException
      */
     public boolean removeImage(final Image image) throws ShiftClientException {
-        final HttpDelete delete = new HttpDelete(this.imageUrl + image.getUrl());
+        return this.removeImageById(image.getItemId());
+    }
+
+    /**
+     * Remove an existing image from SHIFT.
+     *
+     * @param imageId The image ID to remove.
+     * @return {@code true} if successful, {@code false} otherwise.
+     * @throws ShiftClientException
+     */
+    public boolean removeImageById(final String imageId) throws ShiftClientException {
+        final HttpDelete delete = new HttpDelete(this.imageUrl + imageId);
         final HttpResponse response = executeRequest(delete);
 
         return response.getStatusLine().getStatusCode() == 204;
     }
+
 }
