@@ -65,7 +65,7 @@
             <url>https://github.com/retresco/maven-repository/raw/master/releases</url>
         </repository>
         <snapshotRepository>
-            <id>repo</id>
+            <id>snapshot-repo</id>
             <url>https://github.com/retresco/maven-repository/raw/master/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
