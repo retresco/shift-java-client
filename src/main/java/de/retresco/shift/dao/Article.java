@@ -36,7 +36,7 @@ public class Article extends BaseDocument {
      */
     @Getter
     @Setter
-    private String body;
+    private String html;
 
     /**
      * The image for this article.

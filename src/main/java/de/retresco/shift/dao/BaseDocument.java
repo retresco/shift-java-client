@@ -3,11 +3,13 @@
  */
 package de.retresco.shift.dao;
 
+import de.retresco.shift.exceptions.ShiftClientException;
 import de.retresco.shift.exceptions.ShiftDataViolation;
 import de.retresco.shift.serialize.DateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -20,6 +22,10 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Set;
 
@@ -171,6 +177,27 @@ public class BaseDocument {
             }
         }
         return MAPPER.writeValueAsString(this);
+    }
+
+    /**
+     * Compute the SHIFT item id.
+     *
+     * @return
+     * @throws ShiftClientException Thrown if the <code>SHA-1</code> digest is not found!
+     */
+    @JsonIgnore
+    public final String getItemId() throws ShiftClientException {
+        try {
+            final MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+            byte[] hash = sha1.digest(this.getUrl().getBytes(Charset.forName("UTF-8")));
+            final Formatter formatter = new Formatter();
+            for (byte b : hash) {
+                formatter.format("%02x", b);
+            }
+            return formatter.toString();
+        } catch (final NoSuchAlgorithmException e) {
+            throw new ShiftClientException(e);
+        }
     }
 
 }
