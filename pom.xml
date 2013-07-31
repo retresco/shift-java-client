@@ -4,7 +4,7 @@
 
     <groupId>de.retresco.shift</groupId>
     <artifactId>shift-import</artifactId>
-    <version>1.0-beta</version>
+    <version>1.0-beta1</version>
     <packaging>jar</packaging>
 
     <name>shift-import</name>
