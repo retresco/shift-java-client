@@ -80,7 +80,7 @@ public class ShiftClient {
      * @param secure If {@code true} use HTTPS transport, otherwise HTTP is used.
      */
     public ShiftClient(final String apiKey, final String apiSecret, final boolean secure) {
-        this(secure, "shift.retresco.de/contentpool/", apiKey, apiSecret, new DefaultHttpClient());
+        this(secure, "shift.retresco.de", apiKey, apiSecret, new DefaultHttpClient());
     }
 
     /**
