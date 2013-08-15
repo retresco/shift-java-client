@@ -137,6 +137,9 @@ public class ShiftClient {
         final HttpPost post = new HttpPost(this.articleUrl);
 
         try {
+            if (article.getImage() != null && article.getImage().getCaption() == null) {
+                article.getImage().setAsSeparateImage(false);
+            }
             final HttpEntity body = new StringEntity(article.toJson(), ContentType.APPLICATION_JSON);
             post.setEntity(body);
         } catch (final IOException e) {
