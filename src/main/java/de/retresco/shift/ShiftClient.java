@@ -155,7 +155,7 @@ public class ShiftClient {
      * @throws ShiftClientException
      */
     public boolean removeArticle(final Article article) throws ShiftClientException {
-        return this.removeImageById(article.getItemId());
+        return this.removeArticleById(article.getItemId());
     }
 
     /**
