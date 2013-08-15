@@ -60,7 +60,6 @@ public class ArticleImage extends ShiftDao {
      */
     @Getter
     @Setter
-    @NotNull
     private String caption;
 
     /**
