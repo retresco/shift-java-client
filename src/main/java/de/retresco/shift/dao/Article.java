@@ -17,8 +17,6 @@
 package de.retresco.shift.dao;
 
 import de.retresco.shift.exceptions.ShiftDataViolation;
-import lombok.Getter;
-import lombok.Setter;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -38,39 +36,29 @@ public class Article extends BaseDocument {
     /**
      * article title.
      */
-    @Getter
-    @Setter
     @NotNull
     private String title;
 
     /**
      * Teaser.
      */
-    @Getter
-    @Setter
     @NotNull
     private String teaser;
 
     /**
      * The article body.
      */
-    @Getter
-    @Setter
     private String html;
 
     /**
      * The image for this article.
      */
-    @Getter
-    @Setter
     @Valid
     private ArticleImage image;
 
     /**
      * List of categories (Ressorts) for this article.
      */
-    @Getter
-    @Setter
     @Size(min = 1)
     @NotNull
     private List<String> ressort;
@@ -93,4 +81,43 @@ public class Article extends BaseDocument {
         return MAPPER.writeValueAsString(this);
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTeaser() {
+        return teaser;
+    }
+
+    public void setTeaser(String teaser) {
+        this.teaser = teaser;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    public ArticleImage getImage() {
+        return image;
+    }
+
+    public void setImage(ArticleImage image) {
+        this.image = image;
+    }
+
+    public List<String> getRessort() {
+        return ressort;
+    }
+
+    public void setRessort(List<String> ressort) {
+        this.ressort = ressort;
+    }
 }

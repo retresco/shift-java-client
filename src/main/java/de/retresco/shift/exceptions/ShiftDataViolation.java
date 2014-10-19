@@ -16,9 +16,7 @@
  */
 package de.retresco.shift.exceptions;
 
-import de.retresco.shift.dao.BaseDocument;
 import de.retresco.shift.dao.ShiftDao;
-import lombok.Getter;
 
 import javax.validation.ConstraintViolation;
 import java.text.MessageFormat;
@@ -31,7 +29,6 @@ public class ShiftDataViolation extends ShiftException {
     /**
      * Access the underlying bean validation error.
      */
-    @Getter
     private final ConstraintViolation<? extends ShiftDao> violation;
 
     public ShiftDataViolation(final ConstraintViolation<? extends ShiftDao> violation) {
@@ -42,5 +39,9 @@ public class ShiftDataViolation extends ShiftException {
     public String getMessage() {
         final String path = this.violation.getPropertyPath().iterator().next().getName();
         return MessageFormat.format("{0} {1}", path, this.violation.getMessage());
+    }
+
+    public ConstraintViolation<? extends ShiftDao> getViolation() {
+        return violation;
     }
 }

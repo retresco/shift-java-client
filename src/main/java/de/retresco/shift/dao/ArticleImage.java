@@ -16,8 +16,6 @@
  */
 package de.retresco.shift.dao;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.validation.constraints.NotNull;
@@ -32,8 +30,6 @@ public class ArticleImage extends ShiftDao {
     /**
      * The object's URL.
      */
-    @Getter
-    @Setter
     @NotNull
     private String url;
 
@@ -42,8 +38,6 @@ public class ArticleImage extends ShiftDao {
      * <p/>
      * A source can be a news agency (DPA) or one of your own entities.
      */
-    @Getter
-    @Setter
     @NotNull
     @Size(min = 1)
     private List<String> source;
@@ -51,31 +45,70 @@ public class ArticleImage extends ShiftDao {
     /**
      * Some copyright information.
      */
-    @Getter
-    @Setter
     private String copyright;
 
     /**
      * Image caption.
      */
-    @Getter
-    @Setter
     private String caption;
 
     /**
      * Indicates, whether the image should be imported as a standalone image. If set to {@code true},
      * the image will be available for image only widgets like image galleries, e.g.
      */
-    @Getter
-    @Setter
     @JsonProperty("as_separate_image")
     private boolean asSeparateImage = true;
 
     /**
      * Author of the document if any.
      */
-    @Getter
-    @Setter
     private String author;
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public List<String> getSource() {
+        return source;
+    }
+
+    public void setSource(List<String> source) {
+        this.source = source;
+    }
+
+    public String getCopyright() {
+        return copyright;
+    }
+
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public boolean isAsSeparateImage() {
+        return asSeparateImage;
+    }
+
+    public void setAsSeparateImage(boolean asSeparateImage) {
+        this.asSeparateImage = asSeparateImage;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 }
