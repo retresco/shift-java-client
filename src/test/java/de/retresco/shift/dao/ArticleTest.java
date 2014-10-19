@@ -147,4 +147,16 @@ public class ArticleTest extends TestCase {
             assertEquals("timestamp may not be null", e.getMessage());
         }
     }
+
+    @Test
+    public void testArticleWithForeignId() throws ShiftDataViolation, IOException {
+        final Article testArticle = dummyArticle();
+        testArticle.setForeignId("test123");
+        assertEquals("{\"url\":\"http://www.google.de/article.html\",\"source\":[\"me\"]," +
+                "\"timestamp\":\"2012-12-13T14:15:00.000\",\"title\":\"Ein Titel\"," +
+                "\"teaser\":\"Ein Teaser\",\"html\":\"<p>Ein richtig langer Artikel in dem es um " +
+                "Alles und Nichts geht!</p>\",\"foreignId\":\"test123\",\"ressort\":" +
+                        "[\"Politik\"]}", testArticle.toJson());
+    }
+
 }

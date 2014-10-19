@@ -51,6 +51,14 @@ public class Article extends BaseDocument {
     private String html;
 
     /**
+     * Document ID in a source DB.
+     *
+     * When setting this to a consistent value, we make sure that only one document with the
+     * given {@code foreignId} exists in the Shift index.
+     */
+    private String foreignId;
+
+    /**
      * The image for this article.
      */
     @Valid
@@ -119,5 +127,13 @@ public class Article extends BaseDocument {
 
     public void setRessort(List<String> ressort) {
         this.ressort = ressort;
+    }
+
+    public String getForeignId() {
+        return foreignId;
+    }
+
+    public void setForeignId(String foreignId) {
+        this.foreignId = foreignId;
     }
 }
